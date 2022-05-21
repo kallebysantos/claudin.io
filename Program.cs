@@ -1,10 +1,19 @@
-using CloudIn.Contexts.Files.GraphQl;
+using Microsoft.EntityFrameworkCore;
+using CloudIn.Domains.Data;
+using CloudIn.Domains.Data.Extensions;
+using CloudIn.Domains.GraphQl;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddDbContext<DataContext>(optBuilder =>
+        optBuilder
+            .UseLazyLoadingProxies()
+            .UseInMemoryDatabase("CloudInDatabase")
+    )
     .AddGraphQLServer()
-    .AddQueryType<FileQuery>();
+    .RegisterDbContext<DataContext>()
+    .AddQueryType<RootQuery>();
 
 builder.Services
     .AddSpaStaticFiles(config =>
@@ -14,20 +23,25 @@ builder.Services
 var app = builder.Build();
 
 app.UseRouting();
-app.UseEndpoints(config => 
+app.UseEndpoints(config =>
 {
     config.MapGraphQL("/api/graphql");
 });
 
 app.UseSpaStaticFiles();
-app.UseSpa(spaBuilder => 
+app.UseSpa(spaBuilder =>
 {
     spaBuilder.Options.SourcePath = "Client";
 
-    if(builder.Environment.IsDevelopment())
+    if (builder.Environment.IsDevelopment())
     {
         spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
     }
 });
+
+if (builder.Environment.IsDevelopment())
+{
+    app.SeedDatabase();
+}
 
 app.Run();
