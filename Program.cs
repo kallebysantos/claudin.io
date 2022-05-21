@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CloudIn.Domains.Data;
 using CloudIn.Domains.Data.Extensions;
 using CloudIn.Domains.GraphQl;
+using CloudIn.Contexts.Files;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,8 @@ builder.Services
     )
     .AddGraphQLServer()
     .RegisterDbContext<DataContext>()
-    .AddQueryType<RootQuery>();
+    .AddQueryType<RootQuery>()
+    .AddTypeExtension<FilesQuery>();
 
 builder.Services
     .AddSpaStaticFiles(config =>
