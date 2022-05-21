@@ -1,6 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddGraphQLServer();
+
+builder.Services
     .AddSpaStaticFiles(config =>
         config.RootPath = "Client/dist"
     );
