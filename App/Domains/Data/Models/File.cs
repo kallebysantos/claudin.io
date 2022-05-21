@@ -1,6 +1,6 @@
 namespace CloudIn.Domains.Data.Models;
 
-public class File
+public class FileModel
 {
     public Guid Id { get; set; }
 
@@ -10,5 +10,5 @@ public class File
 
     public string PhysicalPath { get; set; } = null!;
 
-    public virtual Folder? Folder { get; set; }
+    public virtual FolderModel? Folder { get; set; }
 }
