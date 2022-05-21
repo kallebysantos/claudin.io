@@ -6,5 +6,7 @@ public class Folder
 
     public string Name { get; set; } = null!;
 
+    public virtual ICollection<File> Files { get; set; } = null!;
+
     public virtual ICollection<Folder> Folders { get; set; } = null!;
 }

@@ -9,4 +9,6 @@ public class File
     public string MimeType { get; set; } = null!;
 
     public string PhysicalPath { get; set; } = null!;
+
+    public virtual Folder? Folder { get; set; }
 }
