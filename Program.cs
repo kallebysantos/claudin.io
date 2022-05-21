@@ -3,6 +3,7 @@ using CloudIn.Domains.Data;
 using CloudIn.Domains.Data.Extensions;
 using CloudIn.Domains.GraphQl;
 using CloudIn.Contexts.Files;
+using CloudIn.Contexts.Folders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,9 @@ builder.Services
     .AddGraphQLServer()
     .RegisterDbContext<DataContext>()
     .AddQueryType<RootQuery>()
-    .AddTypeExtension<FilesQuery>();
+    .AddTypeExtension<FilesQuery>()
+    .AddTypeExtension<FoldersQuery>();
+
 
 builder.Services
     .AddSpaStaticFiles(config =>
