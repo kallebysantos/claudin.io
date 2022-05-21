@@ -1,7 +1,10 @@
+using CloudIn.Contexts.Files.GraphQl;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddGraphQLServer();
+    .AddGraphQLServer()
+    .AddQueryType<FileQuery>();
 
 builder.Services
     .AddSpaStaticFiles(config =>
@@ -10,20 +13,21 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseRouting();
+app.UseEndpoints(config => 
+{
+    config.MapGraphQL("/api/graphql");
+});
+
 app.UseSpaStaticFiles();
 app.UseSpa(spaBuilder => 
 {
     spaBuilder.Options.SourcePath = "Client";
-    
-    Console.WriteLine(builder.Environment.IsDevelopment());
-    Console.WriteLine(app.Environment.IsDevelopment());
 
     if(builder.Environment.IsDevelopment())
     {
         spaBuilder.UseProxyToSpaDevelopmentServer("http://localhost:3000");
     }
 });
-
-app.UseRouting();
 
 app.Run();
