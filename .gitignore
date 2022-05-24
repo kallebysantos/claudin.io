@@ -5,6 +5,7 @@
 
 [Dd]ist/**
 
+Public/Uploads/**
 # User-specific files
 *.rsuser
 *.suo
