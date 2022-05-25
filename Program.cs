@@ -10,6 +10,7 @@ using tusdotnet.Stores;
 using tusdotnet.Models.Configuration;
 using Microsoft.AspNetCore.Http.Features;
 using tusdotnet.Interfaces;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,14 +34,6 @@ builder.Services
 
 var app = builder.Build();
 
-app.Use((context, next) =>
-{
-    // Default limit was changed some time ago. Should work by setting MaxRequestBodySize to null using ConfigureKestrel but this does not seem to work for IISExpress.
-    // Source: https://github.com/aspnet/Announcements/issues/267
-    context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null;
-    return next.Invoke();
-});
-
 app.UseTus(httpContext => new DefaultTusConfiguration
 {
     Store = new TusDiskStore(@"./Public/Uploads"),
@@ -54,10 +47,14 @@ app.UseTus(httpContext => new DefaultTusConfiguration
 
             // A normal use case here would be to read the file and do some processing on it.
             ITusFile file = await eventContext.GetFileAsync();
-            Console.WriteLine(file.Id);
+            Console.WriteLine($"Upload of {eventContext.FileId} completed using {eventContext.Store.GetType().FullName}");
+
+            if (file == null)
+            {
+                return;
+            }
 
             var result = await DoSomeProcessing(file, eventContext.CancellationToken).ConfigureAwait(false);
-
             if (!result)
             {
                 //throw new MyProcessingException("Something went wrong during processing");
@@ -65,8 +62,6 @@ app.UseTus(httpContext => new DefaultTusConfiguration
         }
     }
 });
-
-app.UseRouting();
 
 app.UseRouting();
 app.UseEndpoints(config =>
@@ -92,7 +87,30 @@ if (builder.Environment.IsDevelopment())
 
 app.Run();
 
-Task<bool> DoSomeProcessing(ITusFile file, CancellationToken cancellationToken)
+async Task<bool> DoSomeProcessing(ITusFile file, CancellationToken cancellationToken)
 {
-    return Task.FromResult(true);
+    var metadata = await file.GetMetadataAsync(cancellationToken);
+
+    var fileType = metadata["filetype"].GetString(Encoding.UTF8);
+
+    var fileExtension = "";
+
+    if (fileType == "image/png")
+    {
+        fileExtension = ".png";
+    }
+
+    var fileContent = await file.GetContentAsync(cancellationToken);
+
+    var fileName = $"file{fileExtension}";
+    var folderPath = $"./Public/{file.Id}";
+
+    Directory.CreateDirectory(folderPath);
+
+    using (var fileStream = new FileStream($"{folderPath}/{fileName}", FileMode.CreateNew, FileAccess.Write))
+    {
+        await fileContent.CopyToAsync(fileStream);
+    }
+
+    return await Task.FromResult(true);
 }
