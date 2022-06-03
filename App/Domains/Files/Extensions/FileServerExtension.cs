@@ -3,6 +3,7 @@ using tusdotnet.Stores;
 using tusdotnet.Models;
 using tusdotnet.Interfaces;
 using tusdotnet.Models.Configuration;
+using CloudIn.Domains.Files.Services;
 
 namespace CloudIn.Domains.Files.Extensions;
 
@@ -29,6 +30,7 @@ public static class FileServerExtension
                         return;
                     }
 
+                    await FileProcessor.Write(file, eventContext.CancellationToken);
                 }
             }
         });
