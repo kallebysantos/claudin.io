@@ -10,11 +10,9 @@ public class FileModel
     [Required]
     public string Name { get; set; } = null!;
 
-    [Required]
-    public string MimeType { get; set; } = null!;
+    public string? MimeType { get; set; }
 
-    [Required]
-    public string PhysicalPath { get; set; } = null!;
+    public string? PhysicalPath { get; set; }
 
     public virtual FolderModel ParentFolder { get; set; } = null!;
 }
