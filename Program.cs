@@ -5,11 +5,12 @@ using CloudIn.Domains.GraphQl;
 using CloudIn.Contexts.Files;
 using CloudIn.Contexts.Folders;
 using CloudIn.Domains.Files.Extensions;
-using tusdotnet;
+using CloudIn.Contexts.Files.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddHttpContextAccessor()
     .AddDbContext<DataContext>(optBuilder =>
         optBuilder
             .UseLazyLoadingProxies()
@@ -18,8 +19,14 @@ builder.Services
     .AddGraphQLServer()
     .RegisterDbContext<DataContext>()
     .AddQueryType<RootQuery>()
+    .AddMutationType<RootMutation>()
+    .AddMutationConventions()
     .AddTypeExtension<FilesQuery>()
+    .AddTypeExtension<FilesMutation>()
     .AddTypeExtension<FoldersQuery>();
+
+builder.Services
+    .AddScoped<IFilesRepository, FilesRepository>();
 
 
 builder.Services
