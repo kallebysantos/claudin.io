@@ -30,6 +30,8 @@ public static class FileProcessor
             await fileContent.CopyToAsync(fileStream, cancellationToken);
         }
 
-        return await Task.FromResult(true);
+        await fileContent.DisposeAsync();
+       
+        return await Task.FromResult(true); 
     }
 }

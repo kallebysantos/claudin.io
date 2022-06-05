@@ -31,6 +31,9 @@ public static class FileServerExtension
                     }
 
                     await FileProcessor.Write(file, eventContext.CancellationToken);
+
+                    var terminationStore = (ITusTerminationStore)eventContext.Store;
+                    await terminationStore.DeleteFileAsync(file.Id, eventContext.CancellationToken);
                 }
             }
         });
