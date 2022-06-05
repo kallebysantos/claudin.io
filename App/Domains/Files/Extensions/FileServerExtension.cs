@@ -25,15 +25,13 @@ public static class FileServerExtension
                     ITusFile file = await eventContext.GetFileAsync();
                     Console.WriteLine($"Upload of {eventContext.FileId} completed using {eventContext.Store.GetType().FullName}");
 
-                    if (file == null)
-                    {
-                        return;
-                    }
+                    await FileProcessor.WriteAsync(file, eventContext.CancellationToken);
 
-                    await FileProcessor.Write(file, eventContext.CancellationToken);
-
-                    var terminationStore = (ITusTerminationStore)eventContext.Store;
-                    await terminationStore.DeleteFileAsync(file.Id, eventContext.CancellationToken);
+                    await FileProcessor.DeleteCacheAsync(
+                        file: file,
+                        terminationStore: (ITusTerminationStore)eventContext.Store,
+                        cancellationToken: eventContext.CancellationToken
+                    );
                 }
             }
         });

@@ -5,7 +5,7 @@ namespace CloudIn.Domains.Files.Services;
 
 public static class FileProcessor
 {
-    public async static Task<bool> Write(ITusFile file, CancellationToken cancellationToken)
+    public async static Task<bool> WriteAsync(ITusFile file, CancellationToken cancellationToken)
     {
         var metadata = await file.GetMetadataAsync(cancellationToken);
 
@@ -33,5 +33,10 @@ public static class FileProcessor
         await fileContent.DisposeAsync();
        
         return await Task.FromResult(true); 
+    }
+
+    public static async Task DeleteCacheAsync(ITusFile file, ITusTerminationStore terminationStore, CancellationToken cancellationToken)
+    {
+        await terminationStore.DeleteFileAsync(file.Id, cancellationToken);
     }
 }
