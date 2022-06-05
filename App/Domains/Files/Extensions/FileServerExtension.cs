@@ -16,12 +16,16 @@ public static class FileServerExtension
             UrlPath = "/files",
             Events = new Events
             {
+                OnBeforeCreateAsync = async eventContext => 
+                {
+                    var value = eventContext.HttpContext.Request.Query["fileId"];
+
+                    Console.WriteLine($"ID: {value}");
+
+                    // Check if exists on database
+                },
                 OnFileCompleteAsync = async eventContext =>
                 {
-                    // eventContext.FileId is the id of the file that was uploaded.
-                    // eventContext.Store is the data store that was used (in this case an instance of the TusDiskStore)
-
-                    // A normal use case here would be to read the file and do some processing on it.
                     ITusFile file = await eventContext.GetFileAsync();
                     Console.WriteLine($"Upload of {eventContext.FileId} completed using {eventContext.Store.GetType().FullName}");
 

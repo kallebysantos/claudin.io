@@ -7,7 +7,7 @@ const FileUpload = (props: Props) => {
     console.log(e);
     var file = e.target.files[0];
     const upload = new Upload(file, {
-      endpoint: "http://localhost:5253/files",
+      endpoint: "http://localhost:5253/files?fileId=123",
       retryDelays: [0, 1000, 3000, 5000],
       metadata: {
         filename: file.name,

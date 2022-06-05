@@ -5,6 +5,7 @@ using CloudIn.Domains.GraphQl;
 using CloudIn.Contexts.Files;
 using CloudIn.Contexts.Folders;
 using CloudIn.Domains.Files.Extensions;
+using tusdotnet;
 
 var builder = WebApplication.CreateBuilder(args);
 
