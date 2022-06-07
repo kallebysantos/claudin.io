@@ -6,6 +6,7 @@ using CloudIn.Contexts.Files;
 using CloudIn.Contexts.Folders;
 using CloudIn.Domains.Files.Extensions;
 using CloudIn.Contexts.Files.Repository;
+using CloudIn.Contexts.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,8 @@ builder.Services
     .AddMutationConventions()
     .AddTypeExtension<FilesQuery>()
     .AddTypeExtension<FilesMutation>()
-    .AddTypeExtension<FoldersQuery>();
+    .AddTypeExtension<FoldersQuery>()
+    .AddTypeExtension<UsersQuery>();
 
 builder.Services
     .AddScoped<IFilesRepository, FilesRepository>();

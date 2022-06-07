@@ -10,6 +10,6 @@ public class DataContext : DbContext
     }
 
     public DbSet<FileModel> Files { get; set; } = null!;
-
     public DbSet<FolderModel> Folders { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 }

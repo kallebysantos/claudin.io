@@ -9,10 +9,13 @@ public class FolderModel
 
     [Required]
     public string Name { get; set; } = null!;
+    
+    public virtual User? OwnerUser {get; set;}
 
-    public virtual FolderModel ParentFolder { get; set; } = null!;
+    public virtual FolderModel? ParentFolder { get; set; }
 
     public virtual ICollection<FileModel> Files { get; set; } = null!;
 
     public virtual ICollection<FolderModel> Folders { get; set; } = null!;
+
 }
