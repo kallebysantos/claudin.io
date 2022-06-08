@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CloudIn.Domains.Data;
 using CloudIn.Domains.Data.Extensions;
-using CloudIn.Domains.GraphQl;
-using CloudIn.Contexts.Files;
-using CloudIn.Contexts.Folders;
+using CloudIn.Domains.GraphQL;
 using CloudIn.Domains.Files.Extensions;
 using CloudIn.Contexts.Files.Repository;
 using CloudIn.Contexts.Users;
@@ -21,11 +19,8 @@ builder.Services
     .RegisterDbContext<DataContext>()
     .AddQueryType<RootQuery>()
     .AddMutationType<RootMutation>()
-    .AddMutationConventions()
-    .AddTypeExtension<FilesQuery>()
-    .AddTypeExtension<FilesMutation>()
-    .AddTypeExtension<FoldersQuery>()
-    .AddTypeExtension<UsersQuery>();
+    .AddMutationConventions();
+
 
 builder.Services
     .AddScoped<IFilesRepository, FilesRepository>();

@@ -1,10 +1,9 @@
-using CloudIn.Contexts.Files.Repository;
-using CloudIn.Domains.Data;
-using CloudIn.Domains.Data.Models;
-using CloudIn.Domains.GraphQl;
 using Microsoft.AspNetCore.WebUtilities;
+using CloudIn.Domains.GraphQL;
+using CloudIn.Domains.Data.Models;
+using CloudIn.Contexts.Files.Repository;
 
-namespace CloudIn.Contexts.Files;
+namespace CloudIn.Contexts.Files.GraphQL;
 
 [ExtendObjectType(typeof(RootMutation))]
 public class FilesMutation

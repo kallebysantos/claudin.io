@@ -1,4 +1,4 @@
-namespace CloudIn.Domains.GraphQl;
+namespace CloudIn.Domains.GraphQL;
 
 public class RootMutation
 {

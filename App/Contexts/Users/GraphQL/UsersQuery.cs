@@ -1,8 +1,8 @@
 using CloudIn.Domains.Data;
 using CloudIn.Domains.Data.Models;
-using CloudIn.Domains.GraphQl;
+using CloudIn.Domains.GraphQL;
 
-namespace CloudIn.Contexts.Users;
+namespace CloudIn.Contexts.Users.GraphQL;
 
 [ExtendObjectType(typeof(RootQuery))]
 public class UsersQuery
