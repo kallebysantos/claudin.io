@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using CloudIn.Domains.GraphQL;
 using CloudIn.Domains.Data.Models;
 using CloudIn.Contexts.Files.Repository;
+using CloudIn.Contexts.Files.Contracts.Inputs;
 
 namespace CloudIn.Contexts.Files.GraphQL;
 
@@ -17,21 +18,18 @@ public class FilesMutation
 
     public async Task<string> UploadFileAsync(
         [Service] IHttpContextAccessor httpContextAccessor,
-        string name
+        CreateFileInput createFileInput
     )
     {
-        var baseUrl = $"{httpContextAccessor?.HttpContext.Request.Host.ToUriComponent()}/files";
+        var baseUrl = $"{httpContextAccessor?.HttpContext?.Request.Host.ToUriComponent()}/files";
 
-        var fileObject = new FileModel
-        {
-            Name = name,
-        };
+        var file = await _filesRepository.CreateFileAsync(createFileInput);
 
-        await _filesRepository.AddFileAsync(fileObject);
+        await _filesRepository.AddFileAsync(file);
 
         await _filesRepository.SaveChangesAsync();
         
-        var uploadUrl = QueryHelpers.AddQueryString(baseUrl, "fileId", fileObject.Id.ToString());
+        var uploadUrl = QueryHelpers.AddQueryString(baseUrl, "fileId", file.Id.ToString());
 
         return new(uploadUrl);
     }
